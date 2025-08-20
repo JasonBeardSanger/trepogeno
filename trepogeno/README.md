@@ -20,7 +20,7 @@ This is the main script, call it with python -m nextstrain.genotreponema and pro
 This subdirectory contains scripts that with a vcf and reference could be used to streamline the process of creating a 
 typing scheme for later probe creation and lineage calling.
 
-## example command to create probes and lineage files
+## Example command to create probes and lineage files
 
 trepogeno \
 --json_directory files/json_outputs \
@@ -30,21 +30,34 @@ trepogeno \
 --make_probes \
 --probe_lineage_name custom_probes
 
-## example command to call a lineage
+## Example command to call a lineage
 
 trepogeno \
 --json_directory files/json_outputs \
 --genomic_reference files/reference/nc_021508.fasta \
 --probe_and_lineage_dir files/probes \
---seq_manifest /data/pam/team230/jb71/scratch/nexstrain/manifest.csv \
+--seq_manifest /data/nexstrain/manifest.csv \
 --lineage_call \
 --probe_lineage_name custom_probes
 
 
-## example command to call process and summarise the mykrobe json outputs
+## Example command to call process and summarise the mykrobe json outputs
 trepogeno \
 --json_directory files/json_outputs \
 --tabulate_jsons
+
+## Example full run execution
+
+trepogeno \
+--json_directory files/json_outputs \
+--type_scheme files/Tpallidum.SNP.table.tsv \
+--genomic_reference files/reference/nc_021508.fasta \
+--probe_and_lineage_dir files/probes \
+--make_probes \
+--seq_manifest /data/nexstrain/manifest.csv \
+--probe_lineage_name custom_probes \
+--tabulate_jsons \
+--lineage_call
 
 ## All paramaters 
 ``` 
