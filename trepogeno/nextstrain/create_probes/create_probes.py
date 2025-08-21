@@ -26,7 +26,7 @@ def create_probes(reference_coordinate_filepath, reference_filepath,probe_and_li
         reference_filepath=reference_filepath
     )
 
-    # Mykrobe doesn't take the probe path as an argumen instead relying on users redirecting standard out with >
+    # Mykrobe doesn't take the probe path as an argument instead relying on users redirecting standard out with >
     # As such we need to redirect standard out when using the function to the probe path
     os.makedirs(probe_and_lineage_dir, exist_ok=True)
     if probe_lineage_name:
