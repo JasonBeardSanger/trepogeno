@@ -1,3 +1,5 @@
+Typing scheme rule book.
+
 As a required input when preforming custom lineage calling is a typing scheme which mykrobe sometimes refers to a reference coordinate file.
 This typing scheme is used to define which Alleles at which bases define which lineages.
 Mykobe takes this scheme and for each SNP generates a kmer probe and an entry in a json which it uses to make calls and look up which lineage that call belongs to.
