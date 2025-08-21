@@ -11,7 +11,7 @@ If you experience problems with 'cannot find mccortex31 expected to find it at p
 2. git clone --recursive -b geno_kmer_count https://github.com/Mykrobe-tools/mccortex mccortex
 3. cd mccortex
 4. make
-5. cp bin/mccortex31 /path/mykrobe/expected/
+5. cp bin/mccortex31 ../src/mykrobe/cortex
 
 ## Genotreponema
 This is the main script, call it with python -m nextstrain.genotreponema and provide the relevent arguments
