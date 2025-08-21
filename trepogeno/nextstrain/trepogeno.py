@@ -104,10 +104,10 @@ def parse_arguments():
     return args
 
 def create_probes_from_type_scheme(type_scheme,genomic_reference,probe_and_lineage_dir,probe_lineage_name,kmer_size):
-    create_probes(type_scheme,genomic_reference,probe_and_lineage_dir,probe_lineage_name)
+    create_probes(type_scheme,genomic_reference,probe_and_lineage_dir,probe_lineage_name,kmer_size)
 
 def run_lineage_call(probe_directory,sequence_manifest,json_directory,probe_lineage_name,kmer_size):
-    run_mykrobe_lineage_call(probe_directory,sequence_manifest,json_directory,probe_lineage_name)
+    run_mykrobe_lineage_call(probe_directory,sequence_manifest,json_directory,probe_lineage_name,kmer_size)
 
 def concatenate_and_read_json(json_directory):
     run_tabulate_json(json_directory)
