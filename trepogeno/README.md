@@ -1,7 +1,7 @@
 Typing scheme rule book.
 
 As a required input when preforming custom lineage calling is a typing scheme which mykrobe sometimes refers to a reference coordinate file.
-This typing scheme is used to define which Alleles at which bases define which lineages.
+This typing scheme is used to define which alleles at which bases define which lineages.
 Mykobe takes this scheme and for each SNP generates a kmer probe and an entry in a json which it uses to make calls and look up which lineage that call belongs to.
 
 Mykrobe has some very specific rules when it comes to desgining a typing scheme which can cause some difficulties.
@@ -14,12 +14,15 @@ ref	6654	T	C	DNA	TPE
 ref	6740	A	G	DNA	*TPA.1.6
 ```
 
-The first column must be 'ref'
-The second column is the location base pair 
-The third column is the base found in the reference, the reference allele
-The fourth column is the base found alternatively, the alternative allele
-The fith column must be DNA, mykrobe can also define lineages by amino acid changes within genes, this isn't used here.
-The sixth column is the lineage in which the given SNP can be used to segregate
+1. The first column must be 'ref' 
+2. The second column is the genomic position of the base  
+3. The third column is the base found in the reference, the reference allele 
+4. The fourth column is the base found alternatively, the alternative allele 
+5. The fith column must be DNA, mykrobe can also define lineages by amino acid changes within genes, this isn't used here. 
+6. The sixth column is the lineage in which the given SNP is segregating for
+
+The below line thefore states that the 6654th base is a T in the reference and a C in all members of TPE lineage    
+`ref	6654	T	C	DNA	TPE`
 
 A * must be used for lineages in which the reference genome belongs, as can be seen in the above example.
 Normally mykrobe assumes a lineage is defined by the presence of the alternative allele.
