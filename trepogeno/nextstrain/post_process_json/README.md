@@ -1,15 +1,19 @@
 ## Tabulate 
 ## Function:
-This script is made for the purpose of collecting the json files produced by mykrobe collating important information and outputting it in a more human readable readible and condensed form.
+This script is made for the purpose of collecting the json files produced by mykrobe, collating important information, and outputting it in a more human readable readible, and easily pasable form.
 
 ### Argument Example
 
-python3 tabulate_json.py --json_directory /path/to/json/files/directory/ --check_all
+trepogeno --json_directory /path/to/json/files/directory/ 
 
-#### Internal
+### Inputs
+A path to a directory containing the .json files prodcued by mykrobe 
+supplied by the --json_directory flag
+
+#### Run time function 
 This nested dictionary structure is created internally during procesing.  
 Each json file is a top level key with each containing sets of dictionaries for each lineage that had support. 
-If the flag --check_all is set the script creates a dictionary and checks how many snps were called for every lineage not just the lineages  with support
+If the flag --check_all is set the script creates a dictionary and checks how many snps were called for every lineage not just the lineages with support
 ```
    single_sample_dictionary_full = { 
         ERR9768236{ 
