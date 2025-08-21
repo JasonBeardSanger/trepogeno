@@ -38,7 +38,7 @@ If the flag --check_all is set the script creates a dictionary and checks how ma
 ```
 ### Output
 
-Simple table:
+snps_called.csv:
 ```
 
 Sample_id   |Lineage |Calls made |Possible calls| 
@@ -47,3 +47,5 @@ SRR14277265 |TPE     |  33       |      42      |
 ----------- |--------|-----------|--------------|
 ERR9768236  |TPE.3.1 |  30       |      38      |
 ```
+and an accompanying snps_called.html with built in filtering 
+[trepogeno/nextstrain/images_examples/html_table.png ](url)
