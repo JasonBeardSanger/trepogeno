@@ -58,6 +58,12 @@ def parse_arguments():
     )
 
     parser.add_argument(
+        "--kmer_size",
+        help="The kmer size to use for probe creation and lineage calling, defaults to 21",
+        default=21,
+    )
+
+    parser.add_argument(
         "--seq_manifest",
         help="A manifest of Sample ID sequences as a CSV, the heading should be ID,Read1,Read2. ",
         type=Path,

@@ -6,7 +6,7 @@ from contextlib import redirect_stdout
 #mykrobe functions
 from nextstrain.mykrobe.src.mykrobe.cmds.makeprobes import run as run_make_variant_probes
 
-def create_probes(reference_coordinate_filepath, reference_filepath,probe_and_lineage_dir,probe_lineage_name):
+def create_probes(reference_coordinate_filepath, reference_filepath,probe_and_lineage_dir,probe_lineage_name,kmer_size):
     default_lineage_path = os.path.join(probe_and_lineage_dir,"/lineage.json") #The probe_and_lineage_dir argument is used for both the lineage and probes file
     default_probe_path = os.path.join(probe_and_lineage_dir, "probe.fa") # we use them to set deault paths to the files  
 
@@ -21,7 +21,7 @@ def create_probes(reference_coordinate_filepath, reference_filepath,probe_and_li
         vcf=None,
         genbank=None,
         text_file=reference_coordinate_filepath,
-        kmer=21,
+        kmer=kmer_size, # Mykrobe default kmer size, we should allow this to be set by the user in the future
         lineage=lineage_path, # Mykrobe requries a path to store the lineage json 
         reference_filepath=reference_filepath
     )

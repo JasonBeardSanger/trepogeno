@@ -7,7 +7,7 @@ def check_lineage_file(json_directory,):
 
 
 
-def run_mykrobe_lineage_call(probe_json_directory, sequence_manifest,json_directory,probe_lineage_name):
+def run_mykrobe_lineage_call(probe_json_directory, sequence_manifest,json_directory,probe_lineage_name,kmer_size):
     check_lineage_file(json_directory)
 
     with open(sequence_manifest, "r") as manifest: #This is loop is for parsing a manifest with the structure ID,Read1,Read2
@@ -40,10 +40,10 @@ def run_mykrobe_lineage_call(probe_json_directory, sequence_manifest,json_direct
                 output_format="json",
                 output=f"{json_directory}/{ID}.json",
                 seq=sequences,
+                kmer=kmer_size,
 
-                tmp=None, #This tmp variable and below are set at the defaults when running lineage calling although most are never used, above are set dynamically
+                tmp=None, #This tmp variable and below are the defaults used when running lineage calling although most are never used
                 ont=False,
-                kmer=21, # Must add argument to override 
                 force=False, # Must add argument to override
                 threads=2, # Must add argument to override
                 skeleton_dir="mykrobe/data/skeletons/",
