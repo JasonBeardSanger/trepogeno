@@ -79,6 +79,9 @@ Make Probes
 --probe_lineage_name
     what to call the probe.fa file and lineage.json when writing an output
 
+--kmer_size
+    what kmer size to use when creating the probes
+
 Lineage Calling
 -----------
 --lineage_call
@@ -99,6 +102,8 @@ Lineage Calling
 --probe_lineage_name
     The name of the probe.fa and lineage.json files
 
+--kmer_size
+    what kmer size to use when lineage calling, must match what was used when creating probes
 
 Json Processing
 -----------
