@@ -103,10 +103,10 @@ def parse_arguments():
             parser.error("A direcory to store jsons was not provided but is required for calling lineages")
     return args
 
-def create_probes_from_type_scheme(type_scheme,genomic_reference,probe_and_lineage_dir,probe_lineage_name):
+def create_probes_from_type_scheme(type_scheme,genomic_reference,probe_and_lineage_dir,probe_lineage_name,kmer_size):
     create_probes(type_scheme,genomic_reference,probe_and_lineage_dir,probe_lineage_name)
 
-def run_lineage_call(probe_directory,sequence_manifest,json_directory,probe_lineage_name):
+def run_lineage_call(probe_directory,sequence_manifest,json_directory,probe_lineage_name,kmer_size):
     run_mykrobe_lineage_call(probe_directory,sequence_manifest,json_directory,probe_lineage_name)
 
 def concatenate_and_read_json(json_directory):
@@ -116,10 +116,10 @@ def main():
     args = parse_arguments()
 
     if args.make_probes: 
-        create_probes_from_type_scheme( args.type_scheme, args.genomic_reference, args.probe_and_lineage_dir, args.probe_lineage_name)
+        create_probes_from_type_scheme( args.type_scheme, args.genomic_reference, args.probe_and_lineage_dir, args.probe_lineage_name,args.kmer_size)
 
     if args.lineage_call:
-        run_lineage_call(args.probe_and_lineage_dir,args.seq_manifest,args.json_directory,args.probe_lineage_name)
+        run_lineage_call(args.probe_and_lineage_dir,args.seq_manifest,args.json_directory,args.probe_lineage_name,args.kmer_size)
 
     if args.tabulate_jsons:
         concatenate_and_read_json(args.json_directory)
