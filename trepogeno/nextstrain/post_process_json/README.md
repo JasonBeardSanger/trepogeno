@@ -47,5 +47,5 @@ SRR14277265 |TPE     |  33       |      42      |
 ----------- |--------|-----------|--------------|
 ERR9768236  |TPE.3.1 |  30       |      38      |
 ```
-and an accompanying snps_called.html with built in filtering 
-[trepogeno/nextstrain/images_examples/html_table.png ](url)
+and an accompanying snps_called.html with built in filtering for easier manual inspections
+
