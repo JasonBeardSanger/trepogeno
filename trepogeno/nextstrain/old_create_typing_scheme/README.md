@@ -1,6 +1,9 @@
-# THESE SCRIPTS ARE STANDALONE FROM THE MAIN WORK FLOW
-# The following scripts are _one_ way you can make a lineage_coordinate/typing-scheme file required by mykrobe
-# There is a premade typing scheme in the main repo it is reccomended to use  
+# THESE SCRIPTS ARE STANDALONE FROM THE MAIN PIPLINE AND DEPRECATED IN ESSENCE
+
+
+
+# The following scripts are _one_ way you can make a typing-scheme file required by mykrobe
+# There should be a premade typing scheme in the main repo which its reccomended to use for most users  
 # This describes one method in which to produce similar scheme using Rpinecone and a vcf if wish 
 
 This repo contains  scripts for creating a basic coordinate-file with lineages for mykrobes lineage calling.  
