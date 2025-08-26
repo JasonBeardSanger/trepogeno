@@ -5,13 +5,14 @@ import pandas as pd
 from nextstrain.post_process_json.style import style_html
 
 def get_all_lineage_calls_for_one_sample(json_dict,full_dictionary):
-    #This function creates a dictionary which records the number of calls made vs the number of possible calls in a dictionary
-    #We do this for one sample at a time so its not memory intensive even with many probes
+    """
+    This function creates a dictionary which records the number of calls made vs the number of possible calls in a dictionary
+    We only load one json into memory at a time so it shouldn't be too memory intensive 
+    """
     keys = list(json_dict)
     sample_id = keys[0]
     lineage_list = list(json_dict[sample_id]["lineage_calls"]) #Access the "lineage calls" key and put it in a list
         
-
     single_sample_dictionary_full = {
         sample_id: {}
     }
@@ -20,7 +21,6 @@ def get_all_lineage_calls_for_one_sample(json_dict,full_dictionary):
         possible_calls = 0
         calls_made = 0
 
-        
         calls = json_dict[sample_id]["lineage_calls"].get(lineage, {})
 
         for probe_id, probe_data in calls.items():
@@ -34,7 +34,6 @@ def get_all_lineage_calls_for_one_sample(json_dict,full_dictionary):
         single_sample_dictionary_full[sample_id][lineage] = {
             "calls_made": calls_made,
             "possible_calls": possible_calls,
-             "total_support": round((calls_made / possible_calls * 100), 2)
         }
 
     full_dictionary.update(single_sample_dictionary_full)
@@ -48,23 +47,24 @@ def get_json_file_paths(json_directory_path):
     return json_list
 
 def filter_to_single_rows(call_summary_table):
+    """Blindly gets the lineage with the highest depth per sample, does not consider lineages of equal depth"""
     # Filter to supported lineages only
     call_summary_table_supported = call_summary_table[call_summary_table["Calls Made"] > 0].copy()
 
     # Calculate lineage depth by counting '.' in lineage name
     call_summary_table_supported["lineage_depth"] = call_summary_table_supported["Lineage"].str.count("\.")
 
-    # Sort by Sample ID, then descending lineage depth, then descending Total support
+    # Sort by Sample ID, then descending lineage depth
     call_summary_table_supported_sorted = call_summary_table_supported.sort_values(
-        by=["Sample ID", "lineage_depth", "Total support"], 
-        ascending=[True, False, False]
+        by=["Sample ID", "lineage_depth"], 
+        ascending=[True, False]
     )
 
     # Take the top lineage per Sample ID
     call_summary_supported_best = call_summary_table_supported_sorted.groupby("Sample ID").head(1)
 
     # Save or display
-    call_summary_supported_best.to_csv("best_lineages_from_all.csv", index=False)
+    call_summary_supported_best.to_csv("deepsest_lineage_called_all.csv", index=False)
 
 def create_and_write_table(full_dictionary):
     data = []
@@ -75,23 +75,26 @@ def create_and_write_table(full_dictionary):
                 "Lineage": lineage,
                 "Calls Made": stats.get("calls_made", 0),
                 "Possible Calls": stats.get("possible_calls", 0),
-                "Total support": stats.get("total_support", 0)
             })
 
     call_summary_table = pd.DataFrame(data)
-
 
     csv_path = "./snps_called.csv"
     html_path = "./snps_called.html"
     call_summary_table.to_csv(csv_path, index=False)
     call_summary_table.to_html(html_path, index=False)
-    filter_to_single_rows(call_summary_table)
 
+    filter_to_single_rows(call_summary_table)
     style_html(html_path)
 
-##This function has been written by the brilliant people over at genotyphi
-def get_mykrobe_best_call(genotype,base_id):
+    
 
+def get_mykrobe_best_call(genotype,base_id):
+    """
+    This function below been written by the brilliant people over at genotyphi
+    The intention is to parse the lineage calls and get the 'best' call based on a score given to each lineage for each sample
+    The score is based on the number of nodes in the lineage tree that are 'called'
+    """
     full_lineage_data = genotype[base_id]["phylogenetics"]
 
     genotype_details = full_lineage_data['lineage']['calls_summary']
@@ -121,9 +124,11 @@ def get_mykrobe_best_call(genotype,base_id):
             #node_support = genotype_details[best_genotype]['good_nodes']
 
     print(f"best genotype for {base_id} is {best_genotype}")
-    
-#This is function contols the flow of this script
+
 def run_tabulate_json(json_directory):
+    """
+    Function controling the script execution
+    """
     #First we get the paths to the json file and collect them in a list
     json_list = get_json_file_paths(json_directory)
 
@@ -137,6 +142,6 @@ def run_tabulate_json(json_directory):
             base_id = path.stem #collect the Sample ID, this should also match the top level key of the nested dictionary we just initilised 
 
             full_dictionary = get_all_lineage_calls_for_one_sample(genotype,full_dictionary) #We create a dictionary for each lineage per sample and the number of calls possible vs made for each lineage 
-            get_mykrobe_best_call(genotype,base_id) #This just parses the 'full' dictionary to get which lineage had a highest flat perportion of calls made
+            get_mykrobe_best_call(genotype,base_id) #This just parses the 'full' dictionary to get the deepest lineage called for each sample
             
     create_and_write_table(full_dictionary) #write out the 'best' calls (which lineage for each sample had the highest proportion of calls made)
