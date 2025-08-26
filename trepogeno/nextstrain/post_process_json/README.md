@@ -47,9 +47,8 @@ SRR14277265 |TPE     |  33       |      42      |
 ----------- |--------|-----------|--------------|
 ERR9768236  |TPE.3.1 |  30       |      38      |
 ```
-![Trepogeno_htmlfile](~/images_examples/csv_example.png)
 
 And an accompanying snps_called.html with built in filtering for easier manual inspections
 
-![Trepogeno_htmlfile](~/images_examples/html_table.png)
+![Trepogeno_htmlfile](images_examples/html_table.png)
 
