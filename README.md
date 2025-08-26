@@ -15,7 +15,7 @@ Next to ensure mccortex binaries for mykrobe complie correctly
 5. cp bin/mccortex31 ../src/mykrobe/cortex
 
 ## Trepogeno.py
-This is the main script, once installed system wide like above you can call it anywhere with `trepogeno --agrument 1` 
+This is the main script, once installed system wide as detailed above can be called anywhere with `trepogeno --agrument 1` 
 
 ## create_typing_scheme
 This subdirectory contains scripts relating to creating a typing scheme through use of Rpinecone, a vcf, and a reference.
