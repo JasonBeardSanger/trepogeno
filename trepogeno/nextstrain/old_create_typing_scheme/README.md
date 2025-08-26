@@ -1,16 +1,15 @@
-# THESE SCRIPTS ARE STANDALONE FROM THE MAIN PIPLINE AND DEPRECATED IN ESSENCE
+# **THESE SCRIPTS ARE SEPERATE FROM THE MAIN TOOL AND UNUSED**
+
+## The following scripts are _one_ way you can make a typing-scheme required by mykrobe custome lineage calling
+## This is one methodology in which you could produce a similar scheme using Rpinecone and a vcf if one wished
+## **It is reccomended to use the provided typing scheme**
 
 
-
-# The following scripts are _one_ way you can make a typing-scheme file required by mykrobe
-# There should be a premade typing scheme in the main repo which its reccomended to use for most users  
-# This describes one method in which to produce similar scheme using Rpinecone and a vcf if wish 
-
-This repo contains  scripts for creating a basic coordinate-file with lineages for mykrobes lineage calling.  
-Mykrobe requires the output from create_full_reference_coordinate_file to make its probes.fa and lineage.json files via the `mykrobe variants make-probes` command.  
+This repo contains scripts for creating a basic typing scheme, refered to as a reference coordinate-file by mykrobe for mykrobes lineage calling.  
+Mykrobe requires a typing scheme to make a probes.fa and lineage.json with the `mykrobe variants make-probes` command.  
 The outputs from the make-probes command are used for lineage calling with `mykrobe predict`.  
-These scripts require a vcf and the .pinecone.bootstrap.table.csv from rPinecone which has clusters and lineage cluster assignments against samples.  
-Whith these the scripts can work out which snps define a lineage my checking which snps are present in all members of a lineage cluster while being absent from all other samples.
+These scripts require a vcf and pinecone.bootstrap.table.csv from rPinecone containing clusters and lineage cluster assignments against samples.  
+Whith these the scripts should workout which snps define a lineage by checking which snps are present in all members of a lineage cluster while being absent from all other samples.
 
 # create_probes.sh
 ## Function:
