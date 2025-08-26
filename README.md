@@ -1,4 +1,4 @@
-This repo contains scripts that intend to wrap around mykrobe for the lineage calling of treponema strains
+This repo contains scripts that intend to wrap around mykrobe for the lineage calling of treponema strains.
 The tool, currently nicknamed trepogeno, can be installed as a system wide package with the below instructions:
 
 To set up functionality you must first: 
@@ -14,14 +14,16 @@ Next to ensure mccortex binaries for mykrobe complie correctly
 4. make
 5. cp bin/mccortex31 ../src/mykrobe/cortex
 
-## Genotreponema
-This is the main script, call it with python -m nextstrain.genotreponema and provide the relevent arguments
+## Trepogeno.py
+This is the main script, once installed system wide like above you can call it anywhere with `trepogeno --agrument 1` 
 
 ## create_typing_scheme
-This subdirectory contains scripts that with a vcf and reference could be used to streamline the process of creating a 
-typing scheme for later probe creation and lineage calling.
+This subdirectory contains scripts relating to creating a typing scheme through use of Rpinecone, a vcf, and a reference.
+These scripts are deprectated and not used in normal execution of the tool.
 
-## Example command to create probes and lineage files
+## Create probes lineage files
+To create a probe and lineage file, which is requried for lineage calling, you need a typing scheme and genomic reference.
+For more information of creating a typing scheme refer to the typing scheme rule book in the trepogeno directory.
 
 trepogeno /\
 --json_directory files/json_outputs /\
@@ -31,7 +33,8 @@ trepogeno /\
 --make_probes /\
 --probe_lineage_name custom_probes
 
-## Example command to call a lineage
+## Lineage calling
+Required are the lineage and probe files made by mykrobe, a genomic reference, and a manifest containing paths to the reads you want called.
 
 trepogeno /\
 --json_directory files/json_outputs /\
@@ -42,7 +45,9 @@ trepogeno /\
 --probe_lineage_name custom_probes
 
 
-## Example command to call process and summarise the mykrobe json outputs
+## Process and summarise the mykrobe json outputs
+Required is the path to the directory containing the mykrobe output jsons.
+
 trepogeno /\
 --json_directory files/json_outputs /\
 --tabulate_jsons
