@@ -92,6 +92,7 @@ def create_and_write_table(full_dictionary):
 def get_mykrobe_best_call(genotype,base_id):
     """
     This function below been written by the brilliant people over at genotyphi
+    Minor changes have been made to fit into this script for example ignoring particular lineages
     The intention is to parse the lineage calls and get the 'best' call based on a score given to each lineage for each sample
     The score is based on the number of nodes in the lineage tree that are 'called'
     """
@@ -123,7 +124,127 @@ def get_mykrobe_best_call(genotype,base_id):
             best_genotype = genotype
             #node_support = genotype_details[best_genotype]['good_nodes']
 
-    print(f"best genotype for {base_id} is {best_genotype}")
+    # determine any quality issues and split them amongst our various columns
+    # if the node support for the best genotype is not '1' at all positions, we need to report that
+    best_calls = genotype_details[best_genotype]['genotypes']
+    # remove any calls that are prepended with "lineage", as these are fake levels in the hierarchy
+    best_calls = dict([(x, y) for x, y in best_calls.items() if not x.startswith("lineage")])
+    # get a list of all the calls for calculating confidence later
+    best_calls_vals = list(best_calls.values())
+    poorly_supported_markers = []
+    # dict that keeps percentage supports, key=percent support; value=level
+    lowest_within_genotype_percents = {}
+    # list that gives supports for all markers in best call
+    final_markers = []
+
+    for level in best_calls.keys():
+      # regardless of the call, get info
+      call_details = full_lineage_data["lineage"]['calls'][best_genotype][level]
+      # check that there is something there
+      if call_details:
+          # need to do this weird thing to grab the info without knowing the key name
+          call_details = call_details[list(call_details.keys())[0]]
+          ref = call_details['info']['coverage']['reference']['median_depth']
+          alt = call_details['info']['coverage']['alternate']['median_depth']
+          # calculate percent support for marker
+          try:
+              percent_support = alt / (alt + ref)
+          except ZeroDivisionError:
+              percent_support = 0
+          # get the level name with the genotyphi call, ignoring any markers that don't exist
+          if not level.startswith("lineage"):
+              marker_string = level + ' (' + str(best_calls[level]) + '; ' + str(alt) + '/' + str(ref) + ')'
+              final_markers.append(marker_string)
+      # if the value is null, just report 0 (indicates that no SNV detected, either ref or alt?)
+      else:
+          lowest_within_genotype_percents[0] = level
+          # get the level name with the genotyphi call, ignoring any markers that don't exist
+          if not level.startswith("lineage"):
+              marker_string = level + ' (0)'
+              # its returned null so is therefore by definition poorly supported
+              poorly_supported_markers.append(marker_string)
+              # add to the final markers list too
+              final_markers.append(marker_string)
+              percent_support = 0
+      # if call is 1 then that is fine, count to determine confidence later
+      # if call is 0.5, then get info
+      # if call is 0, there will be no info in the calls section, so just report 0s everywhere
+      if best_calls[level] < 1:
+          # then it must be a 0 or a 0.5
+          # report the value (0/0.5), and also the depth compared to the reference
+          # get the level name with the genotyphi call, ignoring any markers that don't exist
+          if not level.startswith("lineage"):
+              lowest_within_genotype_percents[percent_support] = level
+              # add this to the list of poorly supported markers
+              poorly_supported_markers.append(marker_string)
+
+    # determining final confidence is based ONLY on the actual genotype, not incongruent genotype calls
+    # strong = quality 1 for all calls
+    if best_calls_vals.count(0) == 0 and best_calls_vals.count(0.5) == 0:
+        confidence = 'strong'
+        lowest_support_val = '-'
+    # moderate = quality 1 for all calls bar 1 (which must be quality 0.5 with percent support > 0.5)
+    elif best_calls_vals.count(0) == 0 and best_calls_vals.count(0.5) == 1:
+        if min(lowest_within_genotype_percents.keys()) > 0.5:
+            confidence = 'moderate'
+        else:
+            confidence = 'weak'
+        lowest_support_val = round(min(lowest_within_genotype_percents.keys()), 3)
+    # weak = more than one quality < 1, or the single 0.5 call is < 0.5% support
+    else:
+        confidence = 'weak'
+        lowest_support_val = round(min(lowest_within_genotype_percents.keys()), 3)
+
+    # make a list of all possible quality issues (incongruent markers, or not confident calls within the best geno)
+    non_matching_markers = []
+    non_matching_supports = []
+    # we now want to report any additional markers that aren't congruent with our best genotype
+    #ie if 3.6.1 is the best genotype, but we also have a 3.7.29 call, we need to report the 3.7 and 3.29 markers as incongruent
+    if len(genotype_list) > 1:
+        # remove the best genotype from the list
+        genotype_list.remove(best_genotype)
+        # loop through each incongruent phenotype
+        for genotype in genotype_list:
+            # extract the calls for that genotype
+            other_calls = genotype_details[genotype]['genotypes']
+            # for every call in our BEST calls, we're only interested
+            # in calls that are incongruent
+            for call in other_calls.keys():
+                if call not in best_calls.keys():
+                    call_info = full_lineage_data["lineage"]['calls'][genotype][call]
+                    # check that there is something there (if the value is null, don't report it for incongruent calls)
+                    if call_info:
+                        # need to do this weird thing to grab the info without knowing the key name
+                        call_info = call_info[list(call_info.keys())[0]]
+                        ref_depth = call_info['info']['coverage']['reference']['median_depth']
+                        alt_depth = call_info['info']['coverage']['alternate']['median_depth']
+                        # only keep the call if the alternate has a depth of > 1
+                        # this is because mykrobe fills in intermediate levels of the hierarchy with 0s
+                        # if a lower level SNV marker is detected
+                        if alt_depth >= 1:
+                            percent_support = alt_depth / (alt_depth + ref_depth)
+                            non_matching_supports.append(percent_support)
+                            # get genotyphi call
+                            if not call.startswith("lineage"):
+                                marker_string = call + ' (' + str(other_calls[call]) + '; ' + str(alt_depth) + '/' + str(ref_depth) + ')'
+                                non_matching_markers.append(marker_string)
+
+    # get max value for non matching supports, if empty, return ''
+    if len(non_matching_supports) > 0:
+        max_non_matching = round(max(non_matching_supports), 3)
+    else:
+        max_non_matching = '-'
+    # add '-' for those columns that are empty
+    if len(poorly_supported_markers) == 0:
+        poorly_supported_markers = ['-']
+    if len(non_matching_markers) == 0:
+        non_matching_markers = ['-']
+    if len(final_markers) == 0:
+        final_makers = ['-']
+
+    print(f"best genotype for {base_id} is {best_genotype} with {confidence} confidence and lowest support {lowest_support_val}")
+
+#    return best_genotype, confidence, lowest_support_val, poorly_supported_markers, max_non_matching, non_matching_markers, final_markers
 
 def run_tabulate_json(json_directory):
     """
