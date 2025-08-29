@@ -25,44 +25,44 @@ These scripts are deprectated and not used in normal execution of the tool.
 To create a probe and lineage file, which is requried for lineage calling, you need a typing scheme and genomic reference.
 For more information of creating a typing scheme refer to the typing scheme rule book in the trepogeno directory.
 
-trepogeno /\
---json_directory files/json_outputs /\
---type_scheme files/Tpallidum.SNP.table_hierarchies_2025-05-14.tsv /\
---genomic_reference files/reference/nc_021508.fasta /\
---probe_and_lineage_dir files/probes /\
---make_probes /\
---probe_lineage_name custom_probes
+trepogeno \\    
+--json_directory files/json_outputs \\  
+--type_scheme files/Tpallidum.SNP.table_hierarchies_2025-05-14.tsv \\   
+--genomic_reference files/reference/nc_021508.fasta \\  
+--probe_and_lineage_dir files/probes \\     
+--make_probes \\    
+--probe_lineage_name custom_probe_name
 
 ## Lineage calling
 Required are the lineage and probe files made by mykrobe, a genomic reference, and a manifest containing paths to the reads you want called.
 
-trepogeno /\
---json_directory files/json_outputs /\
---genomic_reference files/reference/nc_021508.fasta /\
---probe_and_lineage_dir files/probes /\
---seq_manifest /data/nexstrain/manifest.csv /\
---lineage_call /\
---probe_lineage_name custom_probes
+trepogeno \\    
+--json_directory files/json_outputs \\  
+--genomic_reference files/reference/nc_021508.fasta \\  
+--probe_and_lineage_dir files/probes \\     
+--seq_manifest /data/nexstrain/manifest.csv \\  
+--lineage_call \\   
+--probe_lineage_name custom_probe_name
 
 
 ## Process and summarise the mykrobe json outputs
 Required is the path to the directory containing the mykrobe output jsons.
 
-trepogeno /\
---json_directory files/json_outputs /\
+trepogeno \\    
+--json_directory files/json_outputs \\  
 --tabulate_jsons
 
 ## Example full run execution
 
-trepogeno /\
---json_directory files/json_outputs /\
---type_scheme files/Tpallidum.SNP.table.tsv /\
---genomic_reference files/reference/nc_021508.fasta /\
---probe_and_lineage_dir files/probes /\
---make_probes /\
---seq_manifest /data/nexstrain/manifest.csv /\
---probe_lineage_name custom_probes /\
---tabulate_jsons /\
+trepogeno \\    
+--json_directory files/json_outputs \\
+--type_scheme files/Tpallidum.SNP.table.tsv \\  
+--genomic_reference files/reference/nc_021508.fasta \\  
+--probe_and_lineage_dir files/probes \\ 
+--make_probes \\    
+--seq_manifest /data/nexstrain/manifest.csv \\  
+--probe_lineage_name custom_probes \\   
+--tabulate_jsons \\ 
 --lineage_call
 
 ## All paramaters 
