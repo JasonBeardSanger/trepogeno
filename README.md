@@ -66,60 +66,59 @@ trepogeno \\
 --lineage_call
 
 ## All paramaters 
-``` 
 
 Make Probes
 -----------
---make_probes
+--make_probes   
     Used to indicate you wish to generate a new set of probes during the work flow
 
---type_scheme
+--type_scheme   
     Path to the file that maps snps to specific genomic coordiantes to lineages, to learn more review mykrobe custom lineage calling documentation.
 
---genomic_reference
+--genomic_reference 
     A fasta file that acts as the genomic reference, must match the reference in the type scheme
 
---probe_and_lineage_dir
+--probe_and_lineage_dir 
     This is the directory in which to save the probe and lineage file during probe creation
 
---probe_lineage_name
-    what to call the probe.fa file and lineage.json when writing an output
+--probe_lineage_name    
+    what to call the custom probe.fa file and lineage.json when writing an output. This changes the prefix, if you supply custom the output will be custom.fa & custom.json. Ommit this flag and it will name them probe.fa and lienage.json.
 
---kmer_size
-    what kmer size to use when creating the probes
+--kmer_size 
+    what kmer size to use when creating the probes. defaults to 21
 
 Lineage Calling
 -----------
---lineage_call
-    Used to indicate you wish to call lineages
+--lineage_call  
+    Used to indicate you wish to execute the lineage calling workflow
 
---json_directory
-    A path to the directory for mykrobe to save json files after calling a lineage
+--json_directory    
+    A path to the directory for mykrobe to save its json files after calling a lineage. These will be named based on the ID supplied in the manifest e.g SRR567232.json
 
---seq_manifest
-    A manifest of Sample ID sequences as a CSV, the heading should be ID,Read1,Read2. If you are not using paired end fastqs and only have one Read leave a trailing , e.g. 'ReadID,/fastq/ReadID1.fastq,'
+--seq_manifest  
+    A manifest of Sample ID and sequences, the heading should be ID,Read1,Read2. If you are not using paired end fastqs and only have one read leave a trailing , e.g. 'ReadID,/fastq/ReadID1.fastq,'
 
---genomic_reference
-    A fasta file that acts as the genomic reference, must match the reference in the type scheme
+--genomic_reference 
+    Provide a path to a fasta file that acts as the genomic reference, must match the reference in the type scheme
 
---probe_and_lineage_dir
-    This is the directory in which to save the probe and lineage file during probe creation
+--probe_and_lineage_dir 
+    This is the directory in which probe.fa and lineage.json file are located
 
---probe_lineage_name
-    The name of the probe.fa and lineage.json files
+--probe_lineage_name    
+    If you wish to use custom probe and lineage files this flag lets you set the name. they must either be the same name prefix e.g custom.fa and custom.json or else ommit this flag and it will instead look for a probe.fa and lineage.json file in the directory you specify. 
 
---kmer_size
-    what kmer size to use when lineage calling, must match what was used when creating probes
+--kmer_size 
+    what kmer size to use when lineage calling, must match what was used when creating probes, default 21
 
 Json Processing
 -----------
---tabulate_jsons
-    Used to indicate you wish to proccess and tabulate the jsons output by mykrobe
+--tabulate_jsons    
+    Used to indicate you wish to execute the workflow to tabulate the output from mykrobe
 
---json_directory
-    A path to the directory mykrobe saved its json's for processing
+--json_directory    
+    Supply a path to the directory containing mykrobe summary json's, theses should be in the format mykrobe uses when `--report_all_calls` is used in mykrobe (The default if you only use trepogeno)
 
-```
+
 
 ### Tool Overview
 ![Trepogeno_pipline](images_examples/pipeline-flow.png)
